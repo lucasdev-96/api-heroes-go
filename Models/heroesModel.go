@@ -12,8 +12,9 @@ type Heroes struct {
 	Universe string `json:"universe"`
 }
 
-func AllHeroes() []Heroes {
-	slice := []Heroes{}
+var slice []Heroes
+
+func CreateHeroes() []Heroes {
 	slice = append(slice, *createHeroes("Bruce Wayne", "Batman", "Tecnologia", "DC"))
 	slice = append(slice, *createHeroes("Clark Kent", "SuperMan", " pode voar, tem força descomunal, visão de raio-x, visão de calor, supersopro, superaudição e invunerabilidade", "DC"))
 	slice = append(slice, *createHeroes("Logan", "Wolwerine", "Força Sobre-humana, cura", "Marvel"))
@@ -30,8 +31,12 @@ func createHeroes(name, surname, power, universe string) *Heroes {
 	}
 }
 
+func AllHeroes() []Heroes {
+	return slice
+}
+
 func GetHero(surname string) (Heroes, error) {
-	heroes := AllHeroes()
+	heroes := slice
 	result := Heroes{}
 	for _, hero := range heroes {
 		if strings.EqualFold(hero.Surname, surname) {
@@ -44,8 +49,7 @@ func GetHero(surname string) (Heroes, error) {
 	return result, nil
 }
 
-func AddNewHero(name, surname, power, universe string) []Heroes {
-	heroes := AllHeroes()
-	heroes = append(heroes, *createHeroes(name, surname, power, universe))
-	return heroes
+func AddNewHero(hero Heroes) []Heroes {
+	slice = append(slice, hero)
+	return slice
 }
