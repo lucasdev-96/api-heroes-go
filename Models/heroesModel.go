@@ -1,5 +1,10 @@
 package models
 
+import (
+	"errors"
+	"strings"
+)
+
 type Heroes struct {
 	Name     string `json:"name"`
 	Surname  string `json:"surname"`
@@ -23,4 +28,24 @@ func createHeroes(name, surname, power, universe string) *Heroes {
 		Power:    power,
 		Universe: universe,
 	}
+}
+
+func GetHero(surname string) (Heroes, error) {
+	heroes := AllHeroes()
+	result := Heroes{}
+	for _, hero := range heroes {
+		if strings.EqualFold(hero.Surname, surname) {
+			result = hero
+		}
+	}
+	if result.Name == "" {
+		return Heroes{}, errors.New("heroi não encontrado")
+	}
+	return result, nil
+}
+
+func AddNewHero(name, surname, power, universe string) []Heroes {
+	heroes := AllHeroes()
+	heroes = append(heroes, *createHeroes(name, surname, power, universe))
+	return heroes
 }
